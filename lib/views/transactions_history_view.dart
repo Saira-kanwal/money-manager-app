@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:money_manager_app_sqlite/view_model/transaction_view_model.dart';
 import 'package:money_manager_app_sqlite/views/add_transaction_view.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,7 @@ class TransactionDataTable extends StatelessWidget {
       Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
-        title: const Text('Transactions History'),
+        title: const Center(child: Text('Transactions History')),
       ),
       body:
       Consumer<TransactionViewModel>(
@@ -47,11 +48,11 @@ class TransactionDataTable extends StatelessWidget {
                 DataColumn(label: Text('Note')),
                 DataColumn(label: Text('Description')),
                 DataColumn(label: Text('Date')),
-                DataColumn(label: Text('Image')),
+                // DataColumn(label: Text('Image')),
                 DataColumn(label: Text('Edit')),
                 DataColumn(label: Text('Delete')),
               ],
-                rows: vm.transactions.map((e) {
+                rows: vm.transactions.map((e){
                   return DataRow(
                       cells: <DataCell>[
                         DataCell(Text("${vm.transactions.indexOf(e)+1}")),
@@ -60,14 +61,14 @@ class TransactionDataTable extends StatelessWidget {
                         DataCell(Text('${e.amount}')),
                         DataCell(Text('${e.note}')),
                         DataCell(Text('${e.description}')),
-                        DataCell(Text('${e.transactionDate}')),
-                        DataCell(Text('${e.imagePath}')),
+                        DataCell(Text(DateFormat("dd-MMM-yyyy").format(e.transactionDate!))),
+                        // DataCell(Text('${e.imagePath}')),
                         DataCell(IconButton(
                           onPressed: () {
                             showDialog(context: context, builder: (context)
                             {
                               return AlertDialog(
-                                icon: Icon(Icons.edit,color: Colors.greenAccent,size: 50,),
+                                icon: const Icon(Icons.edit,color: Colors.greenAccent,size: 50,),
                                 title: const Text("Do you want to Edit this record"),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)
@@ -77,6 +78,7 @@ class TransactionDataTable extends StatelessWidget {
                                       onPressed: (){
                                         Navigator.push(context, MaterialPageRoute(builder: (context) => const AddTransactionView()));
                                         vm.loadData(e);
+
                                         },
                                       child: const Text('yes')),
                                   TextButton(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager_app_sqlite/utils/app_colors.dart';
+import 'package:money_manager_app_sqlite/utils/common_functions.dart';
 import 'package:money_manager_app_sqlite/view_model/transaction_view_model.dart';
-import 'package:money_manager_app_sqlite/views/transactions_history_view.dart';
-import 'package:money_manager_app_sqlite/widgets/type_sector.dart';
+import  'package:money_manager_app_sqlite/widgets/type_sector.dart';
 import 'package:provider/provider.dart';
 import '../widgets/input_field.dart';
 import '../widgets/insert_photo.dart';
@@ -12,10 +12,11 @@ class AddTransactionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TransactionViewModel vm = watch<TransactionViewModel>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
-        title: const Text('Add Transaction'),
+        title:  const Text('Add Transaction'),
         actions: [
           IconButton(
               onPressed: (){},
@@ -64,10 +65,16 @@ class AddTransactionView extends StatelessWidget {
                     readOnly: true,
                     labelText: "Transaction Date",
                     hintText: "Select Transaction Date",
-                    preIcon:  const Icon(Icons.date_range),
+                    preIcon:  const Icon(Icons.calendar_today_outlined),
                     suffixIcon: const Icon(Icons.repeat),
-                    onTap: (){
-
+                    onTap: ()   {
+                      CommonFunctions.showMyDatePicker(
+                          context: context,
+                          selectedDate: vm.selectedDate,
+                          onSelect: (val){
+                            vm.selectedDate = val ;
+                          }
+                      );
                     },
                   ),
 
@@ -102,7 +109,12 @@ class AddTransactionView extends StatelessWidget {
                     height: 10,
                   ),
 
-                  const InsertPhoto(),
+                  InsertPhoto(
+                      onSelect: (val)
+                      {
+                        vm.imagePath = val;
+                      }
+                  ),
 
                   Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -116,9 +128,16 @@ class AddTransactionView extends StatelessWidget {
                               )
                           ),
                           onPressed: () {
-                            vm.update == true ? vm.updateTransaction() : vm.saveTransaction();
+                            if (vm.update == true )
+                              {
+                                vm.updateTransaction(context);
+                              } else {
+                              vm.saveTransaction();
+                              vm.clearData();
+                            }
+                            //vm.update == true ? vm.updateTransaction() : {vm.saveTransaction(), Navigator.pop(context)};
                           },
-                          child: const Text('Save',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17)),
+                          child: Text('Save ${vm.type}',style: const TextStyle(fontWeight: FontWeight.w500,fontSize: 17)),
                         )
                     ),
                   ),
@@ -133,8 +152,9 @@ class AddTransactionView extends StatelessWidget {
                             shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18))
                             )
                           ),
-                          onPressed: () { 
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=> const TransactionDataTable()));
+                          onPressed: () {
+                            vm.clearData();
+                            // Navigator.push(context, MaterialPageRoute(builder: (context)=> const TransactionDataTable()));
                           },
                           child: const Text('Continue',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17)),
 
