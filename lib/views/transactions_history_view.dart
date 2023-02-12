@@ -16,7 +16,7 @@ class TransactionDataTable extends StatelessWidget {
       Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
-        title: const Center(child: Text('Transactions History')),
+        title: const Center(child: Text('History')),
       ),
       body:
       Consumer<TransactionViewModel>(
@@ -107,7 +107,7 @@ class TransactionDataTable extends StatelessWidget {
                                     actions: [
                                       TextButton(
                                           onPressed: (){
-                                            vm.deleteTransaction(e);
+                                            vm.deleteTransaction(e,context);
                                             Navigator.pop(context, true);
                                           },
                                           child: const Text("Yes")

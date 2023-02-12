@@ -33,12 +33,15 @@ class CategoryViewModel extends ChangeNotifier
      if(nameController.text.trim().isNotEmpty)
        {
          String query ="Insert into categories(name, type) values('${nameController.text}', '$selectedType')";
-
+         clearData();
          var id = await db.insert(query);
-         //print(id);
-         nameController.clear();
+         print(id);
+
          notifyListeners();
        }
+   }
+   clearData(){
+     nameController.clear();
    }
 
    loadData(Category cat)
@@ -50,19 +53,21 @@ class CategoryViewModel extends ChangeNotifier
 
    }
 
-  void updateCategory() async {
+  void updateCategory() async
+  {
     if(nameController.text.trim().isNotEmpty)
     {
       String query ="Update categories set name = '${nameController.text}', type ='$selectedType' where id = '$_id' ";
       //print(query);
       var id = await db.update(query);
-      //print(id);
+      print(id);
       nameController.clear();
       notifyListeners();
     }
   }
 
-  void deleteCategory  (Category cat) async{
+  void deleteCategory  (Category cat) async
+  {
      String query = "delete from categories where id = ${cat.id}";
      await db.delete(query);
      notifyListeners();

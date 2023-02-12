@@ -12,14 +12,16 @@ class AddTransactionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //TransactionViewModel vm = watch<TransactionViewModel>();
+    TransactionViewModel vm = context.watch<TransactionViewModel>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
-        title:  const Text('Add Transaction'),
+        title:  Text('Add ${vm.type} '),
         actions: [
           IconButton(
-              onPressed: (){},
+              onPressed: (){
+                vm.clearData();
+              },
               splashRadius: 20,
               icon: const Icon(Icons.cyclone))
         ],
@@ -27,9 +29,10 @@ class AddTransactionView extends StatelessWidget {
       body:SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child:
-        Consumer<TransactionViewModel>(
-            builder: (context, vm, child) {
-              return Column(
+        // Consumer<TransactionViewModel>(
+        //     builder: (context, vm, child) {
+        //       return
+                Column(
                 children: [
                   TypeSelector(
                     onSelect: (val)
@@ -131,11 +134,14 @@ class AddTransactionView extends StatelessWidget {
                             if (vm.update == true )
                               {
                                 vm.updateTransaction(context);
+                                vm.clearData();
+
+                                Navigator.pop(context);
+                                Navigator.pop(context);
                               } else {
-                              vm.saveTransaction();
+                              vm.saveTransaction(context);
                               vm.clearData();
                             }
-                            //vm.update == true ? vm.updateTransaction() : {vm.saveTransaction(), Navigator.pop(context)};
                           },
                           child: Text('Save ${vm.type}',style: const TextStyle(fontWeight: FontWeight.w500,fontSize: 17)),
                         )
@@ -166,11 +172,12 @@ class AddTransactionView extends StatelessWidget {
 
 
                 ],
-              );
-            }
+              )
+          // ;
+            // }
         ),
 
-      ),
+      // ),
     );
   }
 }

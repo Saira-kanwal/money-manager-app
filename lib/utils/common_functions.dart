@@ -16,8 +16,10 @@ class CommonFunctions
   }
 }
 
-validator({required String id, required String category, required String type, required double amount, required String note, required String description, required String date, required String image}){
-
+static showSnackBar({required BuildContext context, required String message})
+{
+  SnackBar snackBar = SnackBar(content: Text(message));
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
 }

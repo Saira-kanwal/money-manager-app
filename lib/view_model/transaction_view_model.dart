@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_manager_app_sqlite/models/transaction_model.dart';
 import 'package:money_manager_app_sqlite/services/sqlite_service.dart';
+import 'package:money_manager_app_sqlite/utils/common_functions.dart';
 import '../models/category_model.dart';
 
 class TransactionViewModel extends ChangeNotifier
@@ -16,7 +17,9 @@ class TransactionViewModel extends ChangeNotifier
   DateTime _selectedDate = DateTime.now();
   String _imagePath = '';
   bool update = false;
-  String _id = '0';
+  String _id = '';
+  double totalIncome = 0;
+  double totalExpense = 0;
   List<String> _categories = [];
   String _type = 'Income';
   String _category = 'Select Income Category';
@@ -65,16 +68,19 @@ set imagePath(String val)
   getTransactions() async {
     var data = await db.getAllRows("Select * from transactions");
     _transactions = data.map((e) => Transaction.fromMap(e)).toList();
+    calculateTotal();
     notifyListeners();
 
   }
 
-  saveTransaction() async
+  saveTransaction(BuildContext context) async
   {
-    if(amountController.text.trim().isNotEmpty )
+    if(_validate(context))
       {
-        String query = "Insert into transactions(id, category, type, amount , note, description, transactionDate , imagePath) values( $_id, '$category', '$type','${amountController.text}',  '${noteController.text}', '${descController.text}', '$selectedDate', '$_imagePath')";
+        String query = "Insert into transactions(category, type, amount , note, description, transactionDate , imagePath) values('$category', '$type','${amountController.text}',  '${noteController.text}', '${descController.text}', '$selectedDate', '$_imagePath')";
         var id = await db.insert(query);
+        CommonFunctions.showSnackBar(context: context, message: "$_type Successfully Saved");
+
         print('Data Saved $id');
         notifyListeners();
       }
@@ -104,30 +110,31 @@ set imagePath(String val)
     amountController.text = trans.amount.toString();
     noteController.text = trans.note.toString();
     descController.text = trans.description.toString();
-    dateController.text = trans.transactionDate.toString();
+    dateController.text = DateFormat("dd-MMM-yyyy").format(_selectedDate);
+    _selectedDate = trans.transactionDate!;
     imagePath = trans.imagePath.toString();
-
     update = true;
   notifyListeners();
 
   }
 
   void updateTransaction(BuildContext context) async {
-    if(amountController.text.trim().isNotEmpty )
+    if(_validate(context))
     {
 
-      String query = "Update transactions set category = '$category', type = '$type', amount = '${amountController.text}', note = '${noteController.text}', description = '${descController.text}', transactionDate = '${dateController.text}', imagePath = '$_imagePath' where id = '$_id' ";
+      String query = "Update transactions set category = '$category', type = '$type', amount = '${amountController.text}', note = '${noteController.text}', description = '${descController.text}', transactionDate = '$_selectedDate', imagePath = '$_imagePath' where id = '$_id' ";
       var id = await db.update(query);
+      CommonFunctions.showSnackBar(context: context, message: "$_type Successfully Updated");
       print('Date Updated $id');
-      Navigator.pop(context);
-      Navigator.pop(context);
+
       notifyListeners();
     }
   }
 
-  void deleteTransaction (Transaction trans) async{
+  void deleteTransaction (Transaction trans, BuildContext context) async{
     String query = "delete from transactions where id = ${trans.id}";
     await db.delete(query);
+    CommonFunctions.showSnackBar(context: context, message: "${trans.type } is Successfully Deleted");
     notifyListeners();
   }
 
@@ -140,6 +147,46 @@ set imagePath(String val)
     dateController.clear();
     descController.clear();
     notifyListeners();
+  }
+
+  bool _validate (BuildContext context)
+  {
+    bool check = true;
+
+    if(_category == "Select Income Category")
+      {
+        check = false;
+        CommonFunctions.showSnackBar(context: context, message: "Please Select Category");
+      }
+    else if(amountController.text.trim().isEmpty)
+      {
+        check = false;
+        CommonFunctions.showSnackBar(context: context, message: "Please Enter Amount");
+      }
+    else if(noteController.text.trim().isEmpty)
+        {
+          check = false;
+          CommonFunctions.showSnackBar(context: context, message: "Please Enter Note");
+        }
+
+    return check;
+  }
+
+  calculateTotal()
+  {
+    totalExpense = 0;
+    totalIncome = 0;
+    for (int i = 0; i< _transactions.length; i++)
+      {
+        if(_transactions[i].type == "Income")
+          {
+            totalIncome += _transactions[i].amount ?? 0;
+          }
+        else
+          {
+            totalExpense += _transactions[i].amount ?? 0;
+          }
+      }
   }
 
 

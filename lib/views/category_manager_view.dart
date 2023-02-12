@@ -10,6 +10,7 @@ class CategoryManagerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CategoryViewModel vm = context.watch<CategoryViewModel>();
     return  Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
@@ -17,6 +18,7 @@ class CategoryManagerView extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: (){
+
               },
               icon: const Icon(Icons.cyclone))
         ],
@@ -24,10 +26,7 @@ class CategoryManagerView extends StatelessWidget {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(15),
         child:
-        Consumer<CategoryViewModel>(
-          builder: (_, vm, child) {
-            vm.getCategories();
-            return Column(
+              Column(
               children: [
                 TypeSelector(
                   onSelect: (val)
@@ -67,7 +66,7 @@ class CategoryManagerView extends StatelessWidget {
                   child: Text("No Categories found",
                       style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 25)))
                 ) :
-            SingleChildScrollView(
+                     SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: DataTable(
             headingRowColor: MaterialStateProperty.all(AppColors.primaryColor),
@@ -138,11 +137,11 @@ class CategoryManagerView extends StatelessWidget {
             ),
             )
               ],
-            );
-          }
-        ),
-      ),
 
+        ),
+
+
+    )
     );
 
   }
