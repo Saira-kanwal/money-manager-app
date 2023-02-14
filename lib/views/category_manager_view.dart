@@ -11,18 +11,14 @@ class CategoryManagerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CategoryViewModel vm = context.watch<CategoryViewModel>();
+    vm.getCategories();
     return  Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.primaryColor,
-        title: const Center(child: Text("Category Manage")),
-        actions: [
-          IconButton(
-              onPressed: (){
-
-              },
-              icon: const Icon(Icons.cyclone))
-        ],
-      ),
+      backgroundColor: Colors.white,
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   backgroundColor: Colors.white,
+      //   title: Center(child: Text("${vm.selectedType} Manager",style: const TextStyle(color: Colors.black),)),
+      // ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(15),
         child:
@@ -53,7 +49,7 @@ class CategoryManagerView extends StatelessWidget {
                         shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)))
                       ),
                         onPressed: (){
-                          vm.update == true ? vm.updateCategory() : vm.saveCategory();
+                          vm.update == true ? vm.updateCategory(context) : vm.saveCategory(context);
                         },
                         child: const Text('Save',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17))),
                   ),
@@ -67,40 +63,40 @@ class CategoryManagerView extends StatelessWidget {
                       style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 25)))
                 ) :
                      SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: DataTable(
-            headingRowColor: MaterialStateProperty.all(AppColors.primaryColor),
-            headingTextStyle: const TextStyle(color: Colors.white),
-            decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.primaryColor)),
-            columns: const <DataColumn>[
-            DataColumn(label: Text("Id")),
-            DataColumn(label: Text("Type")),
-            DataColumn(label: Text("Name")),
-            DataColumn(label: Text("Edit")),
-            DataColumn(label: Text("Delete")),
-            ],
-            rows: vm.categories.map((e) {
-                return DataRow(
-                cells: <DataCell>[
-                DataCell(Text("${vm.categories.indexOf(e)+1}")),
-                DataCell(Text("${e.type}")),
-                DataCell(Text("${e.name}")),
-                DataCell(IconButton(
-                  onPressed: () {
-                    vm.loadData(e);
-                  },
-                  splashRadius: 20,
-                  icon: const Icon(
-                    Icons.edit,
-                    color: Colors.green,
-                  ),
-                )),
-                DataCell(IconButton(
-                  onPressed:() async {
-                    showDialog(context: context, builder: (context)
-                          {
+                      scrollDirection: Axis.horizontal,
+                       child: DataTable(
+                        headingRowColor: MaterialStateProperty.all(AppColors.primaryColor),
+                        headingTextStyle: const TextStyle(color: Colors.white),
+                           decoration: BoxDecoration(
+                               borderRadius: BorderRadius.circular(8),
+                               border: Border.all(color: AppColors.primaryColor)),
+                           columns: const <DataColumn>[
+                             DataColumn(label: Text("Id")),
+                             DataColumn(label: Text("Type")),
+                             DataColumn(label: Text("Name")),
+                             DataColumn(label: Text("Edit")),
+                             DataColumn(label: Text("Delete")),
+                        ],
+                          rows: vm.categories.map((e) {
+                           return DataRow(
+                               cells: <DataCell>[
+                            DataCell(Text("${vm.categories.indexOf(e)+1}")),
+                            DataCell(Text("${e.type}")),
+                            DataCell(Text("${e.name}")),
+                            DataCell(IconButton(
+                              onPressed: () {
+                                  vm.loadData(e);
+                              },
+                              splashRadius: 20,
+                              icon: const Icon(
+                                Icons.edit,
+                                color: Colors.green,
+                             ),
+                               )),
+                            DataCell(IconButton(
+                              onPressed:() async {
+                               showDialog(context: context, builder: (context)
+                              {
                             return AlertDialog(
                               icon: const Icon(Icons.delete_forever, size: 50, color: Colors.red, ),
                               title: const Text("Confirm Delete"),
@@ -111,7 +107,7 @@ class CategoryManagerView extends StatelessWidget {
                               actions: [
                                 TextButton(
                                     onPressed: (){
-                                      vm.deleteCategory(e);
+                                      vm.deleteCategory(e,context);
                                       Navigator.pop(context, true);
                                     }, child: const Text("Yes")
                                 ),
@@ -123,19 +119,19 @@ class CategoryManagerView extends StatelessWidget {
                               ],
                             );
                           });},
-                    //vm.deleteCategory(e);
-                  splashRadius: 20,
-                  icon: const Icon(
-                    Icons.delete_forever,
-                    color: Colors.red,
+
+                              splashRadius: 20,
+                              icon: const Icon(
+                              Icons.delete_forever,
+                              color: Colors.red,
                   ),
                 )
-                ),
-              ]
-              );
-            }).toList()
-            ),
-            )
+                         ),
+                      ]
+                           );
+                          }).toList()
+                       ),
+                     )
               ],
 
         ),

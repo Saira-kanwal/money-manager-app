@@ -1,4 +1,6 @@
 
+// ignore_for_file: avoid_print
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -21,7 +23,7 @@ class TransactionViewModel extends ChangeNotifier
   double totalIncome = 0;
   double totalExpense = 0;
   List<String> _categories = [];
-  String _type = 'Income';
+  String _type = 'income';
   String _category = 'Select Income Category';
   List<Transaction> _transactions = [];
 
@@ -78,29 +80,12 @@ set imagePath(String val)
     if(_validate(context))
       {
         String query = "Insert into transactions(category, type, amount , note, description, transactionDate , imagePath) values('$category', '$type','${amountController.text}',  '${noteController.text}', '${descController.text}', '$selectedDate', '$_imagePath')";
-        var id = await db.insert(query);
         CommonFunctions.showSnackBar(context: context, message: "$_type Successfully Saved");
-
-        print('Data Saved $id');
+        var id = await db.insert(query);
+        // print('Data Saved $id');
         notifyListeners();
       }
   }
-
-// saveTransaction() async
-// {
-//   var trans = Transaction(
-//     type: type,
-//     transactionDate:  _selectedDate,
-//     category: _category,
-//     amount: double.parse(amountController.text),
-//     description: descController.text,
-//     note: noteController.text,
-//     imagePath: '',
-//   );
-//   String query = "Insert into transactions(category, type, amount , note, description, transactionDate , imagePath) values('$category', '$type','${amountController.text}',  '${noteController.text}', '${descController.text}', '$_selectedDate', '$image')";
-//   var id = await db.insert(query);
-//   print('Data saved $id');
-// }
 
   loadData(Transaction trans)
   {
@@ -123,25 +108,25 @@ set imagePath(String val)
     {
 
       String query = "Update transactions set category = '$category', type = '$type', amount = '${amountController.text}', note = '${noteController.text}', description = '${descController.text}', transactionDate = '$_selectedDate', imagePath = '$_imagePath' where id = '$_id' ";
-      var id = await db.update(query);
       CommonFunctions.showSnackBar(context: context, message: "$_type Successfully Updated");
+      var id = await db.update(query);
       print('Date Updated $id');
-
       notifyListeners();
     }
   }
 
   void deleteTransaction (Transaction trans, BuildContext context) async{
     String query = "delete from transactions where id = ${trans.id}";
-    await db.delete(query);
     CommonFunctions.showSnackBar(context: context, message: "${trans.type } is Successfully Deleted");
+    await db.delete(query);
+
     notifyListeners();
   }
 
   clearData()
   {
     _category = "Select Income Category";
-    type = "Income";
+    type = "income";
     amountController.clear();
     noteController.clear();
     dateController.clear();
@@ -178,7 +163,7 @@ set imagePath(String val)
     totalIncome = 0;
     for (int i = 0; i< _transactions.length; i++)
       {
-        if(_transactions[i].type == "Income")
+        if(_transactions[i].type == "income")
           {
             totalIncome += _transactions[i].amount ?? 0;
           }
@@ -187,6 +172,7 @@ set imagePath(String val)
             totalExpense += _transactions[i].amount ?? 0;
           }
       }
+    notifyListeners();
   }
 
 

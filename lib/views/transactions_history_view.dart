@@ -14,9 +14,11 @@ class TransactionDataTable extends StatelessWidget {
   Widget build(BuildContext context) {
     return
       Scaffold(
+        backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: AppColors.primaryColor,
-        title: const Center(child: Text('History')),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: const Center(child: Text('All Transactions',style: TextStyle(color: Colors.black),)),
       ),
       body:
       Consumer<TransactionViewModel>(

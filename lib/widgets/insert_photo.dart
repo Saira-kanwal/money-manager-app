@@ -72,31 +72,5 @@ class _InsertPhotoState extends State<InsertPhoto> {
       );
 
 
-
-    //   Stack(
-    //   children: [
-    //     Container(
-    //       height: 200,
-    //       width: double.maxFinite,
-    //       decoration:  BoxDecoration(
-    //         image: DecorationImage(
-    //             image: showImage(),fit: BoxFit.fill),
-    //         borderRadius:  const BorderRadius.all(Radius.circular(20.0)),
-    //       ),
-    //       child: const Text("")
-    //     ),
-    //
-    //     // const Positioned(
-    //     //     bottom: 20,
-    //     //     right: 20,
-    //     //     child:  CircleAvatar(
-    //     //       radius: 25,
-    //     //       backgroundColor: Colors.purple,
-    //     //       child: Icon(Icons.camera_alt_outlined,color: Colors.white,),
-    //     //     )
-    //     // )
-    //
-    //   ]
-    // );
   }
 }

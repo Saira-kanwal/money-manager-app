@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_manager_app_sqlite/utils/app_colors.dart';
 import 'package:money_manager_app_sqlite/utils/common_functions.dart';
 import 'package:money_manager_app_sqlite/view_model/transaction_view_model.dart';
+import 'package:money_manager_app_sqlite/views/transactions_history_view.dart';
 import  'package:money_manager_app_sqlite/widgets/type_sector.dart';
 import 'package:provider/provider.dart';
 import '../widgets/input_field.dart';
@@ -13,19 +14,22 @@ class AddTransactionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TransactionViewModel vm = context.watch<TransactionViewModel>();
+    vm.getCategories();
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.primaryColor,
-        title:  Text('Add ${vm.type} '),
-        actions: [
-          IconButton(
-              onPressed: (){
-                vm.clearData();
-              },
-              splashRadius: 20,
-              icon: const Icon(Icons.cyclone))
-        ],
-      ),
+      backgroundColor: Colors.white,
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   backgroundColor: Colors.white,
+      //   title:  Center(child: Text('add ${vm.type} ',style: const TextStyle(color: Colors.black),)),
+      //   actions: [
+      //     IconButton(
+      //         onPressed: (){
+      //           vm.clearData();
+      //         },
+      //         splashRadius: 20,
+      //         icon: const Icon(Icons.cyclone))
+      //   ],
+      // ),
       body:SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child:
@@ -159,10 +163,10 @@ class AddTransactionView extends StatelessWidget {
                             )
                           ),
                           onPressed: () {
-                            vm.clearData();
-                            // Navigator.push(context, MaterialPageRoute(builder: (context)=> const TransactionDataTable()));
+
+                           Navigator.push(context, MaterialPageRoute(builder: (context)=> const TransactionDataTable()));
                           },
-                          child: const Text('Continue',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17)),
+                          child: const Text('Show all Transactions',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17)),
 
                         )
                     ),
