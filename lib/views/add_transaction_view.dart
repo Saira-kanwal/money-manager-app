@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:money_manager_app_sqlite/models/transaction_model.dart';
 import 'package:money_manager_app_sqlite/utils/app_colors.dart';
 import 'package:money_manager_app_sqlite/utils/common_functions.dart';
 import 'package:money_manager_app_sqlite/view_model/transaction_view_model.dart';
@@ -7,36 +9,23 @@ import  'package:money_manager_app_sqlite/widgets/type_sector.dart';
 import 'package:provider/provider.dart';
 import '../widgets/input_field.dart';
 import '../widgets/insert_photo.dart';
+import '../widgets/transaction_title.dart';
+import '../widgets/transactions_list_widget.dart';
 
 class AddTransactionView extends StatelessWidget {
   const AddTransactionView({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     TransactionViewModel vm = context.watch<TransactionViewModel>();
+    vm.getTransactions();
     vm.getCategories();
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   backgroundColor: Colors.white,
-      //   title:  Center(child: Text('add ${vm.type} ',style: const TextStyle(color: Colors.black),)),
-      //   actions: [
-      //     IconButton(
-      //         onPressed: (){
-      //           vm.clearData();
-      //         },
-      //         splashRadius: 20,
-      //         icon: const Icon(Icons.cyclone))
-      //   ],
-      // ),
       body:SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
-        child:
-        // Consumer<TransactionViewModel>(
-        //     builder: (context, vm, child) {
-        //       return
-                Column(
+        child: Column(
                 children: [
                   TypeSelector(
                     onSelect: (val)
@@ -152,33 +141,53 @@ class AddTransactionView extends StatelessWidget {
                     ),
                   ),
 
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: SizedBox(
-                        height: 40,
-                        width: MediaQuery.of(context).size.width,
-                        child: OutlinedButton(
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18))
-                            )
-                          ),
-                          onPressed: () {
+                  // Padding(
+                  //   padding: const EdgeInsets.all(10.0),
+                  //   child: SizedBox(
+                  //       height: 40,
+                  //       width: MediaQuery.of(context).size.width,
+                  //       child: OutlinedButton(
+                  //         style: ButtonStyle(
+                  //           shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18))
+                  //           )
+                  //         ),
+                  //         onPressed: () {
+                  //
+                  //          Navigator.push(context, MaterialPageRoute(builder: (context)=> const TransactionDataTable()));
+                  //         },
+                  //         child: const Text('Show all Transactions',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17)),
+                  //
+                  //       )
+                  //   ),
+                  // ),
 
-                           Navigator.push(context, MaterialPageRoute(builder: (context)=> const TransactionDataTable()));
-                          },
-                          child: const Text('Show all Transactions',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17)),
 
-                        )
-                    ),
-                  ),
+                  const TransactionTitle(title: 'All Transactions',),
 
-                  // const TransactionDataTable()
+                  ListView.builder(
+                      itemCount:  vm.transactions.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index)
+                          {
+                              return TransactionListWidget(
+                                title: '${vm.transactions[index].category}',
+                                type: '${vm.transactions[index].type}',
+                                date: DateFormat("dd-MMM-yyyy").format(vm.transactions[index].transactionDate!),
+                                note: '${vm.transactions[index].note}',
+                                amount: '${vm.transactions[index].amount}',
+                                onPressed: (){
+                                  vm.loadData(vm.transactions[index]);
+                                },
+                              );
 
+
+                          }
+                  )
 
                 ],
               )
-          // ;
-            // }
+
         ),
 
       // ),

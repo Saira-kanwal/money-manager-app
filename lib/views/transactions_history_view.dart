@@ -15,13 +15,13 @@ class TransactionDataTable extends StatelessWidget {
     return
       Scaffold(
         backgroundColor: Colors.white,
-      appBar: AppBar(
+        appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: const Center(child: Text('All Transactions',style: TextStyle(color: Colors.black),)),
-      ),
+          title: const Center(child: Text('All Transactions',style: TextStyle(color: Colors.black),)),
+        ),
       body:
-      Consumer<TransactionViewModel>(
+        Consumer<TransactionViewModel>(
         builder: (context, vm, child) {
           vm.getTransactions();
           return SingleChildScrollView(
@@ -32,7 +32,7 @@ class TransactionDataTable extends StatelessWidget {
             const Center(
                 child: Padding(
                 padding: EdgeInsets.all(20.0),
-                child: Text("No Transactions found",
+                  child: Text("No Transactions found",
                     style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 25)))
             ) :
 
@@ -65,8 +65,9 @@ class TransactionDataTable extends StatelessWidget {
                         DataCell(Text('${e.description}')),
                         DataCell(Text(DateFormat("dd-MMM-yyyy").format(e.transactionDate!))),
                         // DataCell(Text('${e.imagePath}')),
-                        DataCell(IconButton(
-                          onPressed: () {
+                        DataCell(
+                            IconButton(
+                             onPressed: () {
                             showDialog(context: context, builder: (context)
                             {
                               return AlertDialog(
@@ -94,10 +95,12 @@ class TransactionDataTable extends StatelessWidget {
                             );
                           },
                           icon: const Icon(Icons.edit,color: Colors.green,),
-                        )),
-                        DataCell(IconButton(
-                          onPressed: () {
-                            showDialog(context: context, builder: (context)
+                        )
+                        ),
+                        DataCell(
+                            IconButton(
+                              onPressed: () {
+                              showDialog(context: context, builder: (context)
                                 {
                                   return  AlertDialog(
                                     icon: const Icon(Icons.delete_forever, size: 50, color: Colors.red, ),
@@ -126,7 +129,8 @@ class TransactionDataTable extends StatelessWidget {
                             );
                           },
                           icon: const Icon(Icons.delete_forever,color: Colors.red,),
-                        ))
+                        )
+                        )
                       ]
                   );
 
@@ -135,7 +139,7 @@ class TransactionDataTable extends StatelessWidget {
           );
         }
       )
-    )
-    ;
+      );
+
   }
 }

@@ -1,13 +1,12 @@
-
-// ignore_for_file: avoid_print
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_manager_app_sqlite/models/chart_model.dart';
 import 'package:money_manager_app_sqlite/models/transaction_model.dart';
 import 'package:money_manager_app_sqlite/services/sqlite_service.dart';
 import 'package:money_manager_app_sqlite/utils/common_functions.dart';
 import '../models/category_model.dart';
+import 'dart:math' as math;
 
 class TransactionViewModel extends ChangeNotifier
 {
@@ -26,28 +25,32 @@ class TransactionViewModel extends ChangeNotifier
   String _type = 'income';
   String _category = 'Select Income Category';
   List<Transaction> _transactions = [];
+  List<ChartModel> _expenseChartData = [];
+  List<ChartModel> _incomeChartData = [];
+  List<Color> colors = [];
 
 
-  List<Transaction> get transactions => _transactions;
-  List<String> get categories => _categories;
-  String get type => _type;
   String get category => _category;
   DateTime get selectedDate => _selectedDate;
+  List<String> get categories => _categories;
+  String get type => _type;
+  List<Transaction> get transactions => _transactions;
+  List<ChartModel> get expenseChartData => _expenseChartData;
+  List<ChartModel> get incomeChartData => _incomeChartData;
 
-
-set imagePath(String val)
-{
+  set imagePath(String val)
+  {
   _imagePath = val;
   notifyListeners();
-}
-
+  }
   set type(String val)
   {
     _type = val;
     notifyListeners();
   }
 
-  set category (String val){
+  set category (String val)
+  {
     _category = val;
     notifyListeners();
   }
@@ -67,10 +70,13 @@ set imagePath(String val)
     notifyListeners();
   }
 
-  getTransactions() async {
+  getTransactions() async
+  {
     var data = await db.getAllRows("Select * from transactions");
     _transactions = data.map((e) => Transaction.fromMap(e)).toList();
+    colors = List.generate(_transactions.length, (index) => Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0));
     calculateTotal();
+    calculateChartData();
     notifyListeners();
 
   }
@@ -110,6 +116,7 @@ set imagePath(String val)
       String query = "Update transactions set category = '$category', type = '$type', amount = '${amountController.text}', note = '${noteController.text}', description = '${descController.text}', transactionDate = '$_selectedDate', imagePath = '$_imagePath' where id = '$_id' ";
       CommonFunctions.showSnackBar(context: context, message: "$_type Successfully Updated");
       var id = await db.update(query);
+      clearData();
       print('Date Updated $id');
       notifyListeners();
     }
@@ -173,6 +180,48 @@ set imagePath(String val)
           }
       }
     notifyListeners();
+  }
+
+  calculateChartData()
+  {
+    _expenseChartData.clear();
+    _incomeChartData.clear();
+    for (int i=0; i< _transactions.length; i++)
+      {
+        double sum = 0;
+        if(_transactions[i].type == "income")
+          {
+            for(int j = 0; j < _transactions.length; j++)
+            {
+              if(_transactions[i].category == _transactions[j].category)
+                {
+                  sum += _transactions[j].amount ?? 0;
+                }
+            }
+            _incomeChartData.add(
+              ChartModel(
+                title: _transactions[i].category.toString(),
+                value: sum
+              )
+            );
+          }else
+            {
+              for(int j = 0; j < _transactions.length; j++)
+              {
+                if(_transactions[i].category == _transactions[j].category)
+                {
+                  sum += _transactions[j].amount ?? 0;
+                }
+              }
+              _expenseChartData.add(
+                  ChartModel(
+                      title: _transactions[i].category.toString(),
+                      value: sum
+                  )
+              );
+            }
+      }
+
   }
 
 

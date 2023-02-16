@@ -14,11 +14,6 @@ class CategoryManagerView extends StatelessWidget {
     vm.getCategories();
     return  Scaffold(
       backgroundColor: Colors.white,
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   backgroundColor: Colors.white,
-      //   title: Center(child: Text("${vm.selectedType} Manager",style: const TextStyle(color: Colors.black),)),
-      // ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(15),
         child:
@@ -57,9 +52,10 @@ class CategoryManagerView extends StatelessWidget {
 
                 const SizedBox(height: 10,),
                 vm.categories.isEmpty ?
-                const Center(child: Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: Text("No Categories found",
+                const Center(
+                    child: Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: Text("No Categories found",
                       style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 25)))
                 ) :
                      SingleChildScrollView(
@@ -97,15 +93,15 @@ class CategoryManagerView extends StatelessWidget {
                               onPressed:() async {
                                showDialog(context: context, builder: (context)
                               {
-                            return AlertDialog(
-                              icon: const Icon(Icons.delete_forever, size: 50, color: Colors.red, ),
-                              title: const Text("Confirm Delete"),
-                              content: const Text("Do you want to delete this record?"),
-                              shape: RoundedRectangleBorder(
+                                return AlertDialog(
+                                  icon: const Icon(Icons.delete_forever, size: 50, color: Colors.red, ),
+                                  title: const Text("Confirm Delete"),
+                                  content: const Text("Do you want to delete this record?"),
+                                  shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)
-                              ),
-                              actions: [
-                                TextButton(
+                                 ),
+                                  actions: [
+                                  TextButton(
                                     onPressed: (){
                                       vm.deleteCategory(e,context);
                                       Navigator.pop(context, true);

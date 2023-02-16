@@ -1,19 +1,25 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:money_manager_app_sqlite/view_model/transaction_view_model.dart';
 import 'package:money_manager_app_sqlite/widgets/indicator.dart';
+import 'package:provider/provider.dart';
+import '../models/chart_model.dart';
 
 class PieChartWidget extends StatefulWidget {
-  const PieChartWidget({super.key});
+  final List<ChartModel> chartData;
+  final double total;
+  const PieChartWidget({super.key, required this.chartData, required this.total});
 
   @override
   State<StatefulWidget> createState() => PieChartWidgetState();
 }
 
-class PieChartWidgetState extends State {
+class PieChartWidgetState extends State <PieChartWidget>{
   int touchedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
+    TransactionViewModel vm = context.read<TransactionViewModel>();
     return AspectRatio(
       aspectRatio: 1.3,
       child: Row(
@@ -45,7 +51,7 @@ class PieChartWidgetState extends State {
                   ),
                   sectionsSpace: 0,
                   centerSpaceRadius: 40,
-                  sections: showingSections(),
+                  sections: showingSections(vm),
                 ),
               ),
             ),
@@ -53,40 +59,16 @@ class PieChartWidgetState extends State {
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const <Widget>[
-              Indicator(
-                color: Colors.blue,
-                text: 'First',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Indicator(
-                color: Colors.yellow,
-                text: 'Second',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Indicator(
-                color: Colors.purple,
-                text: 'Third',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Indicator(
-                color: Colors.green,
-                text: 'Fourth',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 18,
-              ),
-            ],
+            children: widget.chartData.map((e) => Column(
+              children: [
+                Indicator(
+                  color: vm.colors[widget.chartData.indexOf(e)],
+                  text: '${e.title}',
+                  isSquare: true,
+                ),
+              ],
+            ) ).toList()
+
           ),
           const SizedBox(
             width: 28,
@@ -96,68 +78,32 @@ class PieChartWidgetState extends State {
     );
   }
 
-  List<PieChartSectionData> showingSections() {
-    return List.generate(4, (i) {
+  List<PieChartSectionData> showingSections(TransactionViewModel vm) {
+    return
+      List.generate(widget.chartData.length, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 25.0 : 16.0;
       final radius = isTouched ? 60.0 : 50.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
-      switch (i) {
-        case 0:
-          return PieChartSectionData(
-            color: Colors.blue,
-            value: 40,
-            title: '40%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              shadows: shadows,
-            ),
-          );
-        case 1:
-          return PieChartSectionData(
-            color: Colors.yellow,
-            value: 30,
-            title: '30%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              shadows: shadows,
-            ),
-          );
-        case 2:
-          return PieChartSectionData(
-            color: Colors.purple,
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              shadows: shadows,
-            ),
-          );
-        case 3:
-          return PieChartSectionData(
-            color: Colors.green,
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              shadows: shadows,
-            ),
-          );
-        default:
-          throw Error();
-      }
-    });
+      // print(widget.chartData[i].value!);
+      // print(widget.total);
+      // print(widget.chartData[i].value! / widget.total);
+      // print((widget.chartData[i].value! / widget.total) * 100);
+
+
+      return PieChartSectionData(
+        color: vm.colors[i],
+        value: (widget.chartData[i].value! / widget.total) * 100 ,
+        title: '${((widget.chartData[i].value! / widget.total) * 100) .toStringAsFixed(1)}%',
+        radius: radius,
+        titleStyle: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+          shadows: shadows,
+        ),
+      );
+    }
+    );
   }
 }
