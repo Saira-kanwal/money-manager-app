@@ -6,7 +6,7 @@ A **Flutter**-based money management app that helps users track their income and
 
 ## 📸 Screenshots
 
-![Screenshot](assets\images\Money-manager-app.png)
+![Screenshot](assets/images/Money-manager-app.png)
 
 ---
 
