@@ -1,16 +1,55 @@
-# money_manager_app_sqlite
+# Money Manager App
 
-A new Flutter project.
+A **Flutter**-based money management app that helps users track their income and expenses efficiently. The app uses **SQLite** as the local database for storing transactions, ensuring offline functionality.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 📸 Screenshots
 
-A few resources to get you started if this is your first Flutter project:
+![Screenshot](assets\images\Money-manager-app.png)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## ✨ Features
+
+- 📊 Track income and expenses
+- 📅 Filter transactions by date
+- 📂 Categorize transactions
+- 📉 View total balance and spending trends
+- 🖋️ Edit and delete transactions
+- 🏆 Simple and intuitive UI
+- 📡 Offline support with **SQLite** database
+
+---
+
+## 🛠️ Technologies Used
+
+- **Flutter** (Dart)
+- **SQLite** (for local storage)
+- **Provider / GetX** (for state management)
+- **Material Design** (for UI components)
+
+---
+
+## 📜 License
+
+This project is **open-source** and available.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! If you'd like to improve the app, feel free to **fork** the repository and submit a **pull request**.
+
+---
+
+## 📧 Contact
+
+For any inquiries or suggestions, reach out via:
+
+- **GitHub**: [saira-kanwal](https://github.com/saira-kanwal)
+- **Email**: <sairarao046@gmail.com>
+
+---
+
+### ⭐ Don't forget to star the repo if you like this project! ⭐

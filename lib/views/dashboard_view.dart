@@ -30,19 +30,20 @@ class DashboardView extends StatelessWidget {
         style: TabStyle.reactCircle,
         items: const [
           TabItem(
-              icon: Icon(Icons.home,size: 30,color: Colors.grey,),
+              icon: Icon(Icons.add_circle,size: 30,color: Colors.grey,),
               title: ''
           ),
           TabItem(
-              icon: Icon(Icons.add_circle,size: 30,color: Colors.grey,),
-            title: ''
+              icon: Icon(Icons.home,size: 30,color: Colors.grey,),
+              title: ''
           ),
+
           TabItem(
               icon: Icon(Icons.category,size: 30,color: Colors.grey,),
               title: ''
           ),
           TabItem(
-              icon: Icon(Icons.history,size: 30,color: Colors.grey,),
+              icon: Icon(Icons.search,size: 30,color: Colors.grey,),
               title: ''
           )
         ],

@@ -4,7 +4,6 @@ import 'package:money_manager_app_sqlite/models/transaction_model.dart';
 import 'package:money_manager_app_sqlite/utils/app_colors.dart';
 import 'package:money_manager_app_sqlite/utils/common_functions.dart';
 import 'package:money_manager_app_sqlite/view_model/transaction_view_model.dart';
-import 'package:money_manager_app_sqlite/views/transactions_history_view.dart';
 import  'package:money_manager_app_sqlite/widgets/type_sector.dart';
 import 'package:provider/provider.dart';
 import '../widgets/input_field.dart';
@@ -170,17 +169,20 @@ class AddTransactionView extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index)
                           {
-                              return TransactionListWidget(
-                                title: '${vm.transactions[index].category}',
+                              return
+                                TransactionListWidget(
+                                category: '${vm.transactions[index].category}',
                                 type: '${vm.transactions[index].type}',
                                 date: DateFormat("dd-MMM-yyyy").format(vm.transactions[index].transactionDate!),
                                 note: '${vm.transactions[index].note}',
                                 amount: '${vm.transactions[index].amount}',
-                                onPressed: (){
+                                edit:  (){
                                   vm.loadData(vm.transactions[index]);
                                 },
+                                delete:  (){
+                                  vm.deleteTransaction(vm.transactions[index], context);
+                                },
                               );
-
 
                           }
                   )

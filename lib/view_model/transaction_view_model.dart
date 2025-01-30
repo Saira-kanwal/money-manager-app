@@ -15,6 +15,7 @@ class TransactionViewModel extends ChangeNotifier
   final amountController = TextEditingController();
   final noteController = TextEditingController();
   final descController = TextEditingController();
+  final searchController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   String _imagePath = '';
   bool update = false;
@@ -88,11 +89,24 @@ class TransactionViewModel extends ChangeNotifier
         String query = "Insert into transactions(category, type, amount , note, description, transactionDate , imagePath) values('$category', '$type','${amountController.text}',  '${noteController.text}', '${descController.text}', '$selectedDate', '$_imagePath')";
         CommonFunctions.showSnackBar(context: context, message: "$_type Successfully Saved");
         var id = await db.insert(query);
-        // print('Data Saved $id');
+        print('Data Saved $id');
         notifyListeners();
       }
   }
+  //ToDo
+// - Transaction search screen
+// 'search controller',onchange
+  //- date picker (2) start end
+  // search by date
 
+  // Query
+  searchTransactionsByDate(){
+
+  }
+  searchTransactions(){
+    //ToDO
+    //select * from
+  }
   loadData(Transaction trans)
   {
     _id = trans.id.toString();
@@ -105,7 +119,7 @@ class TransactionViewModel extends ChangeNotifier
     _selectedDate = trans.transactionDate!;
     imagePath = trans.imagePath.toString();
     update = true;
-  notifyListeners();
+    notifyListeners();
 
   }
 
